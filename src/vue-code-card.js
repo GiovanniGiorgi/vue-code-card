@@ -1,36 +1,45 @@
-import { createApp } from 'petite-vue'
+import { createApp, reactive } from 'petite-vue'
 
 class VueCodeCard extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
 
-        this._title = '';
-        this._size = 1;
+        this._hass = null;
+        this.scope = {
+            title: '',
+            hass: null,
+            getHass: () => {
+                return this._hass;
+            },
+            update(){
+                this.hass = this.getHass();
+                //variables to update in scope...
+            }
+        }
         
-        this.app = createApp({
-            title: this._title,
-            size: this._size
-        });
+        this.app = createApp(this.scope);
     }
 
     set hass(hass) {
-        console.log(hass)
+        this._hass = hass;
+        this.scope.update();
     }
 
     setConfig(config) {
         if (config && config.template) {
             const style = config.style ? config.style : '';
-            this._title = config.title ? config.title : '';
+            this.scope.title = config.title ? config.title : '';
 
             this._createCard(config.template, style);
-        }else{
+        } else {
             throw new Error('Invalid configuration. Missing template')
         }
     }
 
     getCardSize() {
-        return _size;
+        // A height of 1 is equivalent to 50 pixels
+        return this.shadowRoot.element.clientHeight / 50;
     }
 
     _createCard(mTemplate, mStyle) {
