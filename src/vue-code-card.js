@@ -30,8 +30,11 @@ class VueCodeCard extends HTMLElement {
         if (config && config.template) {
             const style = config.style ? config.style : '';
             this.scope.title = config.title ? config.title : '';
-
-            this._createCard(config.template, style);
+            if (config.default != false){
+                this._createCard(config.template, style);
+            } else {
+                this._createCustomCard(config.template, style);
+            }
         } else {
             throw new Error('Invalid configuration. Missing template')
         }
@@ -46,7 +49,7 @@ class VueCodeCard extends HTMLElement {
         this.shadowRoot.innerHTML = '';
         // 'ha-card' content
         const card = document.createElement('ha-card');
-        card.header = "test";
+        card.header = this.scope.title;
         const content = document.createElement('div');
         content.setAttribute('class', 'card-content');
         content.innerHTML = mTemplate;
@@ -59,6 +62,21 @@ class VueCodeCard extends HTMLElement {
         this.shadowRoot.appendChild(style);
         this.shadowRoot.appendChild(card);
         this.app.mount(card);
+    }
+
+    _createCustomCard(mTemplate, mStyle) {
+        // card content
+        this.shadowRoot.innerHTML = '';
+        const content = document.createElement('div');
+        content.innerHTML = mTemplate;
+
+        // card style
+        const style = document.createElement('style');
+        style.textContent = mStyle
+
+        this.shadowRoot.appendChild(style);
+        this.shadowRoot.appendChild(content);
+        this.app.mount(content);
     }
 }
 
