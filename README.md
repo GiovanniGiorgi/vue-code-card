@@ -1,4 +1,5 @@
-# Vue Code Card by [@GiovanniGiorgi](https://github.com/GiovanniGiorgi)
+# Vue Code Card 
+by [@GiovanniGiorgi](https://github.com/GiovanniGiorgi)
 
 ## Introduction
 Custom Card for [HomeAssistant](home-assistant.io) that supports CSS and HTML with [VUE](https://github.com/vuejs/petite-vue/tree/main) sintax to easly add some logic
@@ -21,7 +22,7 @@ an _hass_ object is exposed in the scope, which allows access to all the data of
 ````YAML
 type: custom:vue-code-card
 title: Language
-default: false
+default: true
 template: |
   <p> {{ title }} - selected: {{ hass.language }} </p>
   <button @click="console.log(hass)">debug</button>
