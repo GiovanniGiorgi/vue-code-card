@@ -25,13 +25,34 @@ type: custom:vue-code-card
 title: Language
 default: true
 template: |
-  <p> {{ title }} - selected: {{ hass.language }} </p>
+  <p> selected: {{ hass.language }} </p>
   <button @click="console.log(hass)">debug</button>
 style: |
   .card-content {
     color: red
   }
 ````
+## Default Layout
+By default the card has this structure surrounding your template:
+````html
+<ha-card>
+  <div class="card-content">
+    <!-- your Template-->
+  </div>
+</ha-card>
+````
+But you can create your own free template with the option _'default: false'_
+````yaml
+type: custom:vue-code-card
+title: Title
+default: false
+template: |
+  <h1> {{ title }} <h1>
+  <div>
+  ...
+  </div>
+````
+
 
 ## VUE Directives
 
