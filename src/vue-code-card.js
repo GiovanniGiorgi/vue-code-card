@@ -1,4 +1,5 @@
 import { createApp, reactive } from 'petite-vue'
+import { subCartdDirective, entityDirective } from './directives'
 
 class VueCodeCard extends HTMLElement {
     constructor() {
@@ -18,7 +19,7 @@ class VueCodeCard extends HTMLElement {
             }
         }
         
-        this.app = createApp(this.scope);
+        this.app = createApp(this.scope).directive('entity', entityDirective);
     }
 
     set hass(hass) {
@@ -30,6 +31,8 @@ class VueCodeCard extends HTMLElement {
         if (config && config.template) {
             const style = config.style ? config.style : '';
             this.scope.title = config.title ? config.title : '';
+            this.app = this.app.directive('card', subCartdDirective(config.cards));
+
             if (config.default != false){
                 this._createCard(config.template, style);
             } else {
@@ -42,7 +45,7 @@ class VueCodeCard extends HTMLElement {
 
     getCardSize() {
         // A height of 1 is equivalent to 50 pixels
-        return this.shadowRoot.element.clientHeight / 50;
+        return this.shadowRoot.lastElementChild.offsetHeight / 50;
     }
 
     _createCard(mTemplate, mStyle) {

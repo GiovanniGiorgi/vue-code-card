@@ -16,8 +16,9 @@ Custom Card for [HomeAssistant](home-assistant.io) that supports CSS and HTML wi
 
 ## Usage
 
-It is possible to resolve the content of a variable or JS expression by inserting it into double brackets {{ }}.\
-an _hass_ object is exposed in the scope, which allows access to all the data of your HA instance.
+Define your card in yaml, adding inner template and style.\
+Use double brackets {{ }} to resolve variable or JS expression;\
+an _'hass'_ object is exposed in the scope, which allows access to all the data of your HA instance.
 
 ````YAML
 type: custom:vue-code-card
@@ -32,7 +33,7 @@ style: |
   }
 ````
 
-## Directives
+## VUE Directives
 
 VUE directives allow to integrate some logic in your code, such as conditionally render or iterate some HTML elements ([petite-vue](https://github.com/vuejs/petite-vue) for reference)
 
@@ -53,8 +54,17 @@ VUE directives allow to integrate some logic in your code, such as conditionally
 </li>
 
 ``````
-
+- `v-effect`
+`````html
+<div v-scope="{ count: 0 }">
+  <div v-effect="$el.textContent = count"></div>
+  <button @click="count++">++</button>
+</div>
+``````
 - `v-bind` (including `:` shorthand and class/style special handling)
+````html
+<img v-bind:src="myUrl">
+````
 - `v-on` (including `@` shorthand and all modifiers)
 - `v-model` (all input types + non-string `:value` bindings)
 - `v-show`
@@ -63,5 +73,11 @@ VUE directives allow to integrate some logic in your code, such as conditionally
 - `v-pre`
 - `v-once`
 - `v-cloak`
-- `v-effect`
 - `@vue:mounted` & `@vue:unmounted` events
+
+## Custom HA Directives [WIP]
+
+- `v-entity` (specify the type and the entityId)
+````html
+<div v-entity:switch="input_boolean.test"></div>
+```````
