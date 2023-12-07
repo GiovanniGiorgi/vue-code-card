@@ -12,7 +12,8 @@ Custom Card for [HomeAssistant](home-assistant.io) that supports CSS and HTML wi
 | title             | string  | **Optional** | Card name                                   | ``                  |
 | template          | string  | **Required** | HTML card content                           | ``                  |
 | style             | string  | **Optional** | CSS applied to the card                     | ``                  |
-| default           | boolean | **Optional** | use ha-card default layout                  | `true`              |
+| default           | boolean | **Optional** | Use ha-card default layout                  | `true`              |
+| cards             | list    | **Optional** | List of cards                               |                     |
 
 ## Usage
 
@@ -98,7 +99,21 @@ VUE directives allow to integrate some logic in your code, such as conditionally
 
 ## Custom HA Directives [WIP]
 
-- `v-entity` (specify the type and the entityId)
+- `v-card` (arg: _`:n`_ index in cards array)
+````yaml
+type: custom:vue-code-card
+title: Day/Night
+default: false
+template: |
+  <h1>{{ title }}</h1>
+  <div v-card:0 ></div>
+cards:
+  - type: entities
+    entities:
+      - entity: sun.sun
+````
+
+- `v-entity` (specify the arg _`:type`_ and the `entityId` as value)
 ````html
 <div v-entity:switch="input_boolean.test"></div>
 ```````

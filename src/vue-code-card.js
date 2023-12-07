@@ -1,4 +1,4 @@
-import { createApp, reactive } from 'petite-vue'
+import { createApp } from 'petite-vue'
 import { subCartdDirective, entityDirective } from './directives'
 
 class VueCodeCard extends HTMLElement {
@@ -6,7 +6,9 @@ class VueCodeCard extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
 
+        this._config = null;
         this._hass = null;
+        this._hassSubscriber = [];
         this.scope = {
             title: '',
             hass: null,
@@ -23,23 +25,43 @@ class VueCodeCard extends HTMLElement {
     }
 
     set hass(hass) {
+        if (this.shadowRoot.childElementCount > 0) {
+            this._updateHass(hass);
+        } else {
+            this._updateHass(hass);
+            this._render();
+        }
+    }
+    _updateHass(hass){
         this._hass = hass;
         this.scope.update();
+        this._hassSubscriber.forEach((el) => {
+            el.hass = hass;
+        })
     }
 
     setConfig(config) {
         if (config && config.template) {
-            const style = config.style ? config.style : '';
-            this.scope.title = config.title ? config.title : '';
-            this.app = this.app.directive('card', subCartdDirective(config.cards));
-
-            if (config.default != false){
-                this._createCard(config.template, style);
-            } else {
-                this._createCustomCard(config.template, style);
+            this._config = config;
+            // new config, update view
+            if (this.shadowRoot.childElementCount > 0) {
+                this._render();
             }
         } else {
             throw new Error('Invalid configuration. Missing template')
+        }
+    }
+
+    _render(){
+        const style = this._config.style ? this._config.style : '';
+        this.scope.title = this._config.title ? this._config.title : '';
+        this.app = this.app.directive('card', subCartdDirective(this._config.cards, this._hass, (card) => {
+            this._hassSubscriber.push(card);
+        }));
+        if (this._config.default != false){
+            this._createCard(this._config.template, style);
+        } else {
+            this._createCustomCard(this._config.template, style);
         }
     }
 
