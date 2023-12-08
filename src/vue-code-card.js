@@ -10,13 +10,21 @@ class VueCodeCard extends HTMLElement {
         this._hass = null;
         this._hassSubscriber = [];
         this.scope = {
-            title: '',
+            config: null,
             hass: null,
+            data: {},
+            state(EntityId){
+                return this.hass.states[EntityId] ? this.hass.states[EntityId].state : 'undefined';
+            },
+            getConfig: () => {
+                return this._config;
+            },
             getHass: () => {
                 return this._hass;
             },
             update(){
                 this.hass = this.getHass();
+                this.config = this.getConfig();
                 //variables to update in scope...
             }
         }
@@ -43,6 +51,7 @@ class VueCodeCard extends HTMLElement {
     setConfig(config) {
         if (config && config.template) {
             this._config = config;
+            this.scope.update();
             // new config, update view
             if (this.shadowRoot.childElementCount > 0) {
                 this._render();

@@ -5,7 +5,6 @@ by [@GiovanniGiorgi](https://github.com/GiovanniGiorgi)
 Custom Card for [HomeAssistant](home-assistant.io) that supports CSS and HTML with [VUE](https://github.com/vuejs/petite-vue/tree/main) sintax to easly add some logic
 
 ## Options
-
 | Name              | Type    | Requirement  | Description                                 | Default             |
 | ----------------- | ------- | ------------ | ------------------------------------------- | ------------------- |
 | type              | string  | **Required** | `custom:vue-code-card`                      |                     |
@@ -16,10 +15,8 @@ Custom Card for [HomeAssistant](home-assistant.io) that supports CSS and HTML wi
 | cards             | list    | **Optional** | List of cards                               |                     |
 
 ## Usage
-
 Define your card in yaml, adding inner template and style.\
 Use double brackets {{ }} to resolve variable or JS expression;\
-an _'hass'_ object is exposed in the scope, which allows access to all the data of your HA instance.
 
 ````YAML
 type: custom:vue-code-card
@@ -33,6 +30,19 @@ style: |
     color: red
   }
 ````
+### Scope
+| Name               | Type    |  Description                                                                    |
+| ------------------ | ------- | ------------------------------------------------------------------------------- |
+| Config             | Object  | Initial config used in YAML                                                     |
+| hass               | Object  | Data from your Home Assistant Istance                                           |
+| data               | Object  | Empty object useufll to define reactive variables                               |
+| state(\<EntityId>) | String  | Return the state of the `Entity`                                                |
+| getConfig()        | Object  | Return the original Config (not the Proxy used for reactive purpose)            |
+| getHass()          | Object  | Return the original hass (not the Proxy used for reactive purpose)              |
+
+To define your own variables that update reactively in the DOM, I suggest to use _'data.own_var_name = value'_ (exemple below)
+instead of _'v-scope'_.
+
 ## Default Layout
 By default the card has this structure surrounding your template:
 ````html
@@ -48,15 +58,13 @@ type: custom:vue-code-card
 title: Title
 default: false
 template: |
-  <h1> {{ title }} <h1>
+  <h1> {{ config.title }} <h1>
   <div>
   ...
   </div>
 ````
 
-
 ## VUE Directives
-
 VUE directives allow to integrate some logic in your code, such as conditionally render or iterate some HTML elements ([petite-vue](https://github.com/vuejs/petite-vue) for reference)
 
 - `v-if` / `v-else` / `v-else-if`
@@ -78,9 +86,9 @@ VUE directives allow to integrate some logic in your code, such as conditionally
 ``````
 - `v-effect`
 `````html
-<div v-scope="{ count: 0 }">
-  <div v-effect="$el.textContent = count"></div>
-  <button @click="count++">++</button>
+<div v-effect="data.count = 0">
+  <div v-effect="$el.textContent = data.count"></div>
+  <button @click="data.count++">++</button>
 </div>
 ``````
 - `v-bind` (including `:` shorthand and class/style special handling)
@@ -98,14 +106,13 @@ VUE directives allow to integrate some logic in your code, such as conditionally
 - `@vue:mounted` & `@vue:unmounted` events
 
 ## Custom HA Directives [WIP]
-
 - `v-card` (arg: _`:n`_ index in cards array)
 ````yaml
 type: custom:vue-code-card
 title: Day/Night
 default: false
 template: |
-  <h1>{{ title }}</h1>
+  <h1>{{ config.title }}</h1>
   <div v-card:0 ></div>
 cards:
   - type: entities
