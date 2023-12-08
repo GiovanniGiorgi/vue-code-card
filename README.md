@@ -16,7 +16,7 @@ Custom Card for [HomeAssistant](home-assistant.io) that supports CSS and HTML wi
 
 ## Usage
 Define your card in yaml, adding inner template and style.\
-Use double brackets {{ }} to resolve variable or JS expression;\
+Use double brackets {{ }} to resolve variable or JS expression
 
 ````YAML
 type: custom:vue-code-card
@@ -33,7 +33,7 @@ style: |
 ### Scope
 | Name               | Type    |  Description                                                                    |
 | ------------------ | ------- | ------------------------------------------------------------------------------- |
-| Config             | Object  | Initial config used in YAML                                                     |
+| config             | Object  | Initial config used in YAML                                                     |
 | hass               | Object  | Data from your Home Assistant Istance                                           |
 | data               | Object  | Empty object useufll to define reactive variables                               |
 | state(\<EntityId>) | String  | Return the state of the `Entity`                                                |
