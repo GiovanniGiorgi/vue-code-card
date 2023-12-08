@@ -34,7 +34,7 @@ style: |
 | Name               | Type    |  Description                                                                    |
 | ------------------ | ------- | ------------------------------------------------------------------------------- |
 | config             | Object  | Initial config used in YAML                                                     |
-| hass               | Object  | Data from your Home Assistant Istance                                           |
+| hass               | Object  | Data from your Home Assistant instance                                          |
 | data               | Object  | Empty object useufll to define reactive variables                               |
 | state(\<EntityId>) | String  | Return the state of the `Entity`                                                |
 | getConfig()        | Object  | Return the original Config (not the Proxy used for reactive purpose)            |
@@ -85,21 +85,43 @@ VUE directives allow to integrate some logic in your code, such as conditionally
 - `@vue:mounted` & `@vue:unmounted` events
 
 ## Custom HA Directives [WIP]
-- `v-card` (arg: _`:n`_ index in cards array)
+### `v-card`
+accepts arg or value _`n`_ as index in cards array\
+(WARNING: arg passed with colons _'`:`'_ do not resolve variables )
 ````yaml
 type: custom:vue-code-card
 title: Day/Night
 default: false
 template: |
   <h1>{{ config.title }}</h1>
-  <div v-card:0 ></div>
+  <div v-card:0 ></div> 
+# <!-- OR v-card="0" -->
 cards:
   - type: entities
     entities:
       - entity: sun.sun
 ````
+or directly a valid _`object`_ as value  ( { type: 'string', [...] } )
+````yaml
+type: custom:vue-code-card
+title: Day/Night
+default: false
+template: |
+  <h1>{{ config.title }}</h1>
+  <div v-for="card in config.cards"
+       v-card="card">
+  </div>
+cards:
+  - type: entities
+    entities:
+      - entity: sun.sun
+  - type: entity
+    entity: person.test
 
-- `v-entity` (specify the arg _`:type`_ and the `entityId` as value)
+````
+
+### `v-entity`
+specify the arg _`:type`_ and the `entityId` as value
 ````html
 <div v-entity:switch="input_boolean.test"></div>
 ```````
@@ -113,7 +135,8 @@ By default the card has this structure surrounding your template:
   </div>
 </ha-card>
 ````
-But you can create your own free template with the option _'default: false'_
+But you can create your own free template with the option _'default: false'_.\
+In this case no background, no border, no margin will be set
 ````yaml
 type: custom:vue-code-card
 title: Title

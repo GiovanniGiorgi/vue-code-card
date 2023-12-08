@@ -6,6 +6,8 @@ class VueCodeCard extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
 
+        this.refreshTimer = null;
+
         this._config = null;
         this._hass = null;
         this._hassSubscriber = [];
@@ -52,9 +54,15 @@ class VueCodeCard extends HTMLElement {
         if (config && config.template) {
             this._config = config;
             this.scope.update();
-            // new config, update view
+            // new config, update view //TODO: loading
             if (this.shadowRoot.childElementCount > 0) {
-                this._render();
+                // 
+                if (this.refreshTimer){
+                    clearTimeout(this.refreshTimer);
+                }
+                this.refreshTimer = setTimeout(() => {
+                    this._render();
+                }, 3000);
             }
         } else {
             throw new Error('Invalid configuration. Missing template')
@@ -64,6 +72,8 @@ class VueCodeCard extends HTMLElement {
     _render(){
         const style = this._config.style ? this._config.style : '';
         this.scope.title = this._config.title ? this._config.title : '';
+        this.shadowRoot.innerHTML = '';
+        this._hassSubscriber = [];
         this.app = this.app.directive('card', subCartdDirective(this._config.cards, this._hass, (card) => {
             this._hassSubscriber.push(card);
         }));
@@ -80,7 +90,6 @@ class VueCodeCard extends HTMLElement {
     }
 
     _createCard(mTemplate, mStyle) {
-        this.shadowRoot.innerHTML = '';
         // 'ha-card' content
         const card = document.createElement('ha-card');
         card.header = this.scope.title;
@@ -100,7 +109,6 @@ class VueCodeCard extends HTMLElement {
 
     _createCustomCard(mTemplate, mStyle) {
         // card content
-        this.shadowRoot.innerHTML = '';
         const content = document.createElement('div');
         content.innerHTML = mTemplate;
 

@@ -17,18 +17,38 @@
  */
 
 export function subCartdDirective(cards, hass, subscribeHass) {
-    return ({el, arg, effect}) => {
+    return ({el, arg, get, effect}) => {
         effect(() => {
-            if (!cards || !(arg && cards[arg]) || !cards[0]){
-                throw new Error('Directive Error: v-card card not found');
+            let card = get();
+            if (typeof card === 'object'){
+                if (!'type' in card){
+                    throw new Error('Directive Error: v-card, wrong object declaration');
+                }
+            } else if (typeof card === 'number'){
+                if (!cards || cards.length < 1){
+                    throw new Error('Directive Error: v-card card not found');
+                }
+                if (card >= cards.length) {
+                    throw new Error('Directive Error: v-card, array out of bounds');
+                }
+                card = cards[card];
+            } else {
+                if (!cards || cards.length < 1){
+                    throw new Error('Directive Error: v-card card not found');
+                }
+                if (!arg || arg >= cards.length) {
+                    throw new Error('Directive Error: v-card, array out of bounds');
+                }
+                card = arg ? cards[arg] : cards[0];
             }
-            if (window.loadCardHelpers) {
-                window.loadCardHelpers().then(helpers => {
-                    let card = arg ? cards[arg] : cards[0];
-                    const cardElement = createCardElement(card, hass, helpers);
-                    subscribeHass(card);
-                    el.appendChild(cardElement);
-                });
+            if ('type' in card){
+                if (window.loadCardHelpers) {
+                    window.loadCardHelpers().then(helpers => {
+                        const cardElement = createCardElement(card, hass, helpers);
+                        subscribeHass(card);
+                        el.appendChild(cardElement);
+                    });
+                }
             }
         });
     }
