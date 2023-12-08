@@ -43,27 +43,6 @@ style: |
 To define your own variables that update reactively in the DOM, I suggest to use _'data.own_var_name = value'_ (exemple below)
 instead of _'v-scope'_.
 
-## Default Layout
-By default the card has this structure surrounding your template:
-````html
-<ha-card>
-  <div class="card-content">
-    <!-- your Template-->
-  </div>
-</ha-card>
-````
-But you can create your own free template with the option _'default: false'_
-````yaml
-type: custom:vue-code-card
-title: Title
-default: false
-template: |
-  <h1> {{ config.title }} <h1>
-  <div>
-  ...
-  </div>
-````
-
 ## VUE Directives
 VUE directives allow to integrate some logic in your code, such as conditionally render or iterate some HTML elements ([petite-vue](https://github.com/vuejs/petite-vue) for reference)
 
@@ -124,3 +103,24 @@ cards:
 ````html
 <div v-entity:switch="input_boolean.test"></div>
 ```````
+
+## Default Layout
+By default the card has this structure surrounding your template:
+````html
+<ha-card>
+  <div class="card-content">
+    <!-- your Template-->
+  </div>
+</ha-card>
+````
+But you can create your own free template with the option _'default: false'_
+````yaml
+type: custom:vue-code-card
+title: Title
+default: false
+template: |
+  <h1> {{ config.title }} <h1>
+  <div>
+  ...
+  </div>
+````
