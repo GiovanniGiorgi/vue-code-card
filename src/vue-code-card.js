@@ -92,6 +92,7 @@ class VueCodeCard extends HTMLElement {
     _createCard(mTemplate, mStyle) {
         // 'ha-card' content
         const card = document.createElement('ha-card');
+        card.style.overflow = 'hidden';
         card.header = this.scope.title;
         const content = document.createElement('div');
         content.setAttribute('class', 'card-content');
@@ -110,6 +111,7 @@ class VueCodeCard extends HTMLElement {
     _createCustomCard(mTemplate, mStyle) {
         // card content
         const content = document.createElement('div');
+        content.style.overflow = 'hidden';
         content.innerHTML = mTemplate;
 
         // card style

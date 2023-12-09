@@ -84,9 +84,10 @@ VUE directives allow to integrate some logic in your code, such as conditionally
 - `v-cloak`
 - `@vue:mounted` & `@vue:unmounted` events
 
-## Custom HA Directives [WIP]
+## Custom HA Directives
 ### `v-card`
-accepts arg or value _`n`_ as index in cards array\
+Render other cards inside a div, defined in standard YAML or JS Object (with same attributes).\
+Accepts arg or value _`n`_ as index in cards array\
 (WARNING: arg passed with colons _'`:`'_ do not resolve variables )
 ````yaml
 type: custom:vue-code-card
@@ -101,15 +102,17 @@ cards:
     entities:
       - entity: sun.sun
 ````
-or directly a valid _`object`_ as value  ( { type: 'string', [...] } )
+Or directly a valid _`object`  { type: 'string', [...] }_ as value
+
+Use the modifier _`.embedded`_ to render the sub-card without his default card style\
+(reccomended for use within _'default: true'_ cards)
 ````yaml
 type: custom:vue-code-card
 title: Day/Night
-default: false
+default: true
 template: |
-  <h1>{{ config.title }}</h1>
   <div v-for="card in config.cards"
-       v-card="card">
+       v-card.embedded="card">
   </div>
 cards:
   - type: entities
@@ -120,7 +123,7 @@ cards:
 
 ````
 
-### `v-entity`
+### `v-entity` [WIP]
 specify the arg _`:type`_ and the `entityId` as value
 ````html
 <div v-entity:switch="input_boolean.test"></div>
@@ -147,3 +150,7 @@ template: |
   ...
   </div>
 ````
+
+## Credits
+
+For the rendering of sub-cards I was inspired by the project [Vertical Stack In Card](https://github.com/ofekashery/vertical-stack-in-card) by [@ofekashery](https://github.com/ofekashery)
