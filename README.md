@@ -86,9 +86,8 @@ VUE directives allow to integrate some logic in your code, such as conditionally
 
 ## Custom HA Directives
 ### `v-card`
-Render other cards inside a div, defined in standard YAML or JS Object (with same attributes).\
-Accepts arg or value _`n`_ as index in cards array\
-(WARNING: arg passed with colons _'`:`'_ do not resolve variables )
+Allows to render inside a div other HA cards, defined in standard YAML or JS Object (with same attributes).\
+Accepts arg or value _`n`_ as index of YAML's cards array\
 ````yaml
 type: custom:vue-code-card
 title: Day/Night
@@ -102,7 +101,8 @@ cards:
     entities:
       - entity: sun.sun
 ````
-Or directly a valid _`object`  { type: 'string', [...] }_ as value
+Or directly a valid _`object`  { type: 'string', [...] }_ as value.\
+(WARNING: arg passed with colons _'`:`'_ do not resolve variables )
 
 Use the modifier _`.embedded`_ to render the sub-card without his default card style\
 (reccomended for use within _'default: true'_ cards)
