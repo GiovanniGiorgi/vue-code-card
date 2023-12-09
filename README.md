@@ -2,7 +2,7 @@
 by [@GiovanniGiorgi](https://github.com/GiovanniGiorgi)
 
 ## Introduction
-Custom Card for [HomeAssistant](home-assistant.io) that supports CSS and HTML with [VUE](https://github.com/vuejs/petite-vue/tree/main) sintax to easly add some logic
+Custom Card for [HomeAssistant](home-assistant.io) that supports CSS and HTML with [VUE](https://github.com/vuejs/petite-vue/tree/main) syntax to easly add some logic.
 
 ## Options
 | Name              | Type    | Requirement  | Description                                 | Default             |
