@@ -53,16 +53,17 @@ class VueCodeCard extends HTMLElement {
     setConfig(config) {
         if (config && config.template) {
             this._config = config;
-            this.scope.update();
-            // new config, update view //TODO: loading
+            // new config, update view
             if (this.shadowRoot.childElementCount > 0) {
-                // 
+                //blur while tiping
+                this.shadowRoot.lastElementChild.style.filter = 'blur(5px)';
                 if (this.refreshTimer){
                     clearTimeout(this.refreshTimer);
                 }
                 this.refreshTimer = setTimeout(() => {
+                    this.scope.update();
                     this._render();
-                }, 3000);
+                }, 1500);
             }
         } else {
             throw new Error('Invalid configuration. Missing template')
